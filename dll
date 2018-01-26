@@ -1,0 +1,248 @@
+#include<iostream>
+using namespace std;
+//creating node for doubly linked list
+class node
+    {
+    public:
+        int data;
+        node *next;
+        node *prev;
+    //creating constructor for class node
+        node()
+            {
+                data=0;
+                next=NULL;
+                prev=NULL;
+            }
+    };
+//creating the doubly linked list
+class dll
+    {
+    private:
+        node *head;
+        node *tail;
+        int n;
+    //creating constructor for dll.
+    public:
+    dll()//constructor for dll.
+        {
+            head=NULL;
+            tail=NULL;
+            n=0;
+        }
+//declaring functions for dll.
+    void insertx(int number);
+    void insertat(int pos,int number);
+    void deletex();
+    void deleteat(int pos);
+    void countitems();
+    void display();
+    };
+//Defining the functions:
+//definfing insertx(int number);
+void dll::insertx(int number)
+{
+    //creating a new node
+    node *temp=new node;
+    if(head==NULL)//if initially no nodes are present
+        {
+            head=temp;
+            tail=temp;
+            temp->data=number;
+            n++;
+            cout<<"A new list is created"<<endl;
+        }
+        else
+        {
+            temp->data=number;
+            tail->next=temp;//tail's next is assigned to temp.
+            temp->prev=tail;//temp's previous is assigned to temp.
+            tail=temp;//temp is the new tail.
+            n++;
+        }
+}
+void dll::insertat(int pos,int number)
+{
+    node *temp=new node;//creating new node.
+//checking different conditions for pos.
+    if(pos==1)
+        {
+            temp->data=number;
+            temp->next=head;//assigning temp's next to head.
+            head->prev=temp;//assigning head's previous to temp.
+            head=temp;//temp is the new node.
+            n++;
+        }
+    else if(pos==n+1)
+        {
+            insertx(number);
+        }
+    else if(pos==2)
+        {
+            temp->data=number;
+            temp->next=(head->next)->next;
+            head->next=temp;//assigning head's next to temp.
+            temp->prev=head;//assigning temp's prev to head.
+            n++;
+        }
+    else if((pos>2) && (pos<n+1))
+        {
+            node *slider1=head;//creating a slider node.
+            for(int i=1;i<=pos-1;i++)
+             {
+                slider1=slider1->next;//moving the loop to the desired position.
+             }
+            temp->next=slider1->next;//temp's next points to slider1's next.
+            (slider1->next)->prev=temp;//the previous of the node next to slider1 points to temp.
+            slider1->next=temp;//slider1's next points to temp.
+            temp->prev=slider1;//temp's previous points to temp.
+            temp->data=number;//assigning data to the number.
+            n++;
+        }
+    else
+        {
+            cout<<"invalid choice"<<endl;
+        }
+}
+//defining deletex().
+void dll::deletex()
+    {
+        if(head==NULL)
+        {
+            cout<<"There is nothing to delete"<<endl;
+        }
+        else
+            {
+                (tail->prev)->next=NULL;
+                tail=tail->prev;
+                n--;
+            }
+    }
+void dll::deleteat(int pos)
+    {
+        if(pos==n)
+            {
+                deletex();
+            }
+        else if(pos==1)
+            {
+                head=head->next;
+                (head->prev)->next=NULL;
+                head->prev=NULL;
+                n--;
+            }
+        else if((pos>1) && (pos<n))
+            {
+                node *slider2=head;//a silder to get to to the desired position.
+                node *slider7=head->next;
+                for(int j=1;j<pos-1;j++)//starting the loop to reach at the desired position.
+                    {
+                        slider2=slider2->next;
+                        slider7=slider7->next;
+                    }
+                slider2->next=(slider2->next)->next;
+                (slider2->next)->prev=slider2;
+                slider7->next=NULL;
+                slider7->prev=NULL;
+                n--;
+            }
+        else
+            cout<<"Deletion is impossible"<<endl;
+    }
+    //defining count items .
+void dll::countitems()
+    {
+        if(head==NULL)
+        {
+            cout<<"Doubly linked list has zero elements"<<endl;
+        }
+        else
+            {
+                int count3=1;
+                node *slider3=head;
+                while(slider3->next!=NULL)
+                {
+                    slider3=slider3->next;
+                    count3++;
+                }
+            cout<<"Linked list has "<<count3<<" elements"<<endl;
+            }
+    }
+void dll::display()
+    {
+        if(head==NULL)
+        {
+            cout<<"Linked list is empty"<<endl;
+        }
+        else
+        {
+            node *slider4=head;
+            while(slider4!=NULL)
+        {
+            cout<<slider4->data;
+            cout<<"->";
+            slider4=slider4->next;
+        }
+        cout<<"NULL"<<endl;
+    }
+    }
+int main()
+{
+    dll list1;
+    list1.insertx(546);
+    list1.insertx(4354);
+    list1.insertx(89);
+    list1.insertx(64533);
+    list1.insertx(42545);
+    list1.insertx(67);
+    list1.insertx(865);
+    list1.insertx(45);
+    list1.display();
+char ch='y';
+    while(ch!='n')
+    {
+        cout<<"1-Insert,2-Insertat,3-Delete,4-Deleteat,5-Count,6-Display"<<endl;
+        int cho;
+        cin>>cho;
+        switch(cho)
+            {
+            case 1:
+                int n1;
+                cout<<"enter number"<<endl;
+                cin>>n1;
+                list1.insertx(n1);
+                list1.display();
+            break;
+            case 2:
+                int n2,n3;
+                cout<<"enter pos and number"<<endl;
+                cin>>n2>>n3;
+                list1.insertat(n2,n3);
+                list1.display();
+            break;
+            case 3:
+                list1.deletex();
+                list1.display();
+            break;
+            case 4:
+                cout<<"enter pos"<<endl;
+                cin>>n3;
+                list1.deleteat(n3);
+                list1.display();
+            break;
+            case 5:
+                list1.countitems();
+            break;
+            case 6:
+                list1.display();
+            break;
+            default:
+                cout<<"Invalid choice"<<endl;
+            }
+        cout<<"Do you want to continue,if no press n,if yes press any bottom"<<endl;
+        cin>>ch;
+        }
+    if(ch=='n')
+        cout<<"Thanks for using my code"<<endl;
+    return 0;
+}
